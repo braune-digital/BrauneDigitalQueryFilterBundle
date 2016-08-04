@@ -19,8 +19,8 @@
         "MIT"
     ],
     "require" : {
-        "doctrine/orm": "^2.5",
-        "doctrine/doctrine-bundle": "^1.5"
+        "doctrine/orm": "2.*",
+        "doctrine/doctrine-bundle": "1.*"
     },
     "autoload" : {
         "psr-4" : {
