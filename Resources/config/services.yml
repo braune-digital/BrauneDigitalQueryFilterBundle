@@ -1,0 +1,63 @@
+services:
+    ### Query Manager
+    bd_query_filter.query_manager:
+        class: 'BrauneDigital\QueryFilterBundle\Service\QueryManager'
+    ### Filters
+    bd_query_filter.filters.group:
+        class: 'BrauneDigital\QueryFilterBundle\Query\Filter\GroupFilter'
+        tags:
+            - {name: bd_query_filter.filter, alias: "group"}
+    bd_query_filter.filters.and:
+        class: 'BrauneDigital\QueryFilterBundle\Query\Filter\GroupFilter'
+        tags:
+            - {name: bd_query_filter.filter, alias: "and"}
+        arguments: ['and']
+    bd_query_filter.filters.or:
+        class: 'BrauneDigital\QueryFilterBundle\Query\Filter\GroupFilter'
+        tags:
+            - {name: bd_query_filter.filter, alias: "or"}
+        arguments: ['or']
+    bd_query_filter.filters.equal:
+        class: 'BrauneDigital\QueryFilterBundle\Query\Filter\EqualFilter'
+        tags:
+            - {name: bd_query_filter.filter, alias: "equal"}
+
+    bd_query_filter.filters.range:
+        class: 'BrauneDigital\QueryFilterBundle\Query\Filter\RangeFilter'
+        tags:
+            - {name: bd_query_filter.filter, alias: "range"}
+
+    bd_query_filter.filters.like:
+        class: 'BrauneDigital\QueryFilterBundle\Query\Filter\LikeFilter'
+        tags:
+            - {name: bd_query_filter.filter, alias: "like"}
+
+    bd_query_filter.filters.in:
+        class: 'BrauneDigital\QueryFilterBundle\Query\Filter\InFilter'
+        tags:
+            - {name: bd_query_filter.filter, alias: "in"}
+
+    bd_query_filter.filters.is_not_null:
+        class: 'BrauneDigital\QueryFilterBundle\Query\Filter\IsNotNullFilter'
+        tags:
+            - {name: bd_query_filter.filter, alias: "is_not_null"}
+
+    bd_query_filter.filters.not_in:
+        class: 'BrauneDigital\QueryFilterBundle\Query\Filter\NotInFilter'
+        tags:
+            - {name: bd_query_filter.filter, alias: "not_in"}
+
+    bd_query_filter.filters.collection_count:
+        class: 'BrauneDigital\QueryFilterBundle\Query\Filter\CollectionCountFilter'
+        tags:
+            - {name: bd_query_filter.filter, alias: "collection-count"}
+
+    bd_query_filter.filters.word:
+        class: 'BrauneDigital\QueryFilterBundle\Query\Filter\WordFilter'
+        tags:
+            - {name: bd_query_filter.filter, alias: 'word'}
+
+    bd_query_filter.filters.text:
+        class: 'BrauneDigital\QueryFilterBundle\Query\Filter\TextFilter'
+        tags:
+            - {name: bd_query_filter.filter, alias: 'text'}

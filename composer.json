@@ -1,0 +1,30 @@
+{
+    "name" : "braune-digital/query-filter-bundle",
+    "description" : "Query filtering in your frontend",
+    "type" : "symfony-bundle",
+    "authors" : [
+        {
+            "name" : "Braune Digital GmbH",
+            "email" : "mail@braune-digital.com"
+        },
+        {
+            "name" : "Patrick Rathje",
+            "email" : "pr@braune-digital.com"
+        }
+    ],
+    "keywords" : [
+        "api query sql frontend"
+    ],
+    "license" : [
+        "MIT"
+    ],
+    "require" : {
+        "doctrine/orm": "^2.5",
+        "doctrine/doctrine-bundle": "^1.5"
+    },
+    "autoload" : {
+        "psr-4" : {
+            "BrauneDigital\\QueryFilterBundle\\" : ""
+        }
+    }
+}
