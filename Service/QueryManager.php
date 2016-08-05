@@ -59,6 +59,10 @@ class QueryManager {
 
     public function getExpr(QueryBuilderJoinWrapperInterface $qbWrapper, $data, $alias = null, $property = null, $optional = false) {
 
+        if(empty($data)) {
+            return null;
+        }
+
         if (array_key_exists('property', $data)) {
             list($alias, $property) = $this->getAliasProperty($qbWrapper, $data['property'], $optional);
         }
@@ -97,11 +101,6 @@ class QueryManager {
 
             //build filters
             foreach($filterConfig as $property => $filterData) {
-
-                //convert old style
-                if (!array_key_exists('property', $filterData)) {
-                    $filterData['property'] = $property;
-                }
 
                 $expr = $this->getExpr($qbWrapper, $filterData);
 
