@@ -51,14 +51,15 @@ class TextFilter extends BaseFilter
         $expressions = array();
 
         //convert words into parameters
-        foreach ($words as $word) {
-            $wordParam = $qbWrapper->newParam('%'.$word.'%');
+	foreach ($words as $word) {
+            $wordLikeParam = $qbWrapper->newParam('%'.$word.'%');
+            $wordEqParam = $qbWrapper->newParam($word);
             //each word has to appear in at least one field
             $comparisons = array();
             foreach($paths as $path) {
-                $comparison = new Comparison($path, 'LIKE', $wordParam);
-                if ($comparison) {
-                    $comparisons[] = $comparison;
+                $exp =  $qbWrapper->getQueryBuilder()->expr()->orX(new Comparison($path, 'LIKE', $wordLikeParam), new Comparison($path, '=', $wordEqParam));
+                if ($exp) {
+                    $comparisons[] = $exp;
                 }
             }
 
@@ -66,7 +67,6 @@ class TextFilter extends BaseFilter
                 $expressions[] = call_user_func_array(array($qbWrapper->getQueryBuilder()->expr(), $func), $comparisons);
             }
         }
-
 
         if (count($expressions) > 0) {
             return call_user_func_array(array($qbWrapper->getQueryBuilder()->expr(), 'andX'), $expressions);
