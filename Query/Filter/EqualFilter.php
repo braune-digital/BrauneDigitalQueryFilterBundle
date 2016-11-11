@@ -35,10 +35,7 @@ class EqualFilter extends BaseFilter
 
             $expressions = [];
             foreach($values as $value) {
-
-                if ($value) {
-                    $expressions[] = $qbWrapper->getQueryBuilder()->expr()->eq($path, $qbWrapper->newParam($value));
-                }
+                $expressions[] = $qbWrapper->getQueryBuilder()->expr()->eq($path, $qbWrapper->newParam($value));
             }
 
             if (count($expressions)) {
