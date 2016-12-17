@@ -61,3 +61,12 @@ services:
         class: 'BrauneDigital\QueryFilterBundle\Query\Filter\TextFilter'
         tags:
             - {name: bd_query_filter.filter, alias: 'text'}
+    bd_query_filter.filters.not:
+        class: 'BrauneDigital\QueryFilterBundle\Query\Filter\NotFilter'
+        tags:
+            - {name: bd_query_filter.filter, alias: 'not'}
+
+    bd_query_filter.filters.is_null:
+        class: 'BrauneDigital\QueryFilterBundle\Query\Filter\IsNullFilter'
+        tags:
+            - {name: bd_query_filter.filter, alias: 'is_null'}
