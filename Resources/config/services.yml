@@ -70,3 +70,8 @@ services:
         class: 'BrauneDigital\QueryFilterBundle\Query\Filter\IsNullFilter'
         tags:
             - {name: bd_query_filter.filter, alias: 'is_null'}
+
+    bd_query_filter.filters.datetime_range:
+            class: 'BrauneDigital\QueryFilterBundle\Query\Filter\DateTimeRangeFilter'
+            tags:
+                - {name: bd_query_filter.filter, alias: "date_time_range"}
