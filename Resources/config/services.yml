@@ -1,7 +1,10 @@
+parameters:
+    bd_query_filter.query_manager.class: 'BrauneDigital\QueryFilterBundle\Service\QueryManager'
+    
 services:
     ### Query Manager
     bd_query_filter.query_manager:
-        class: 'BrauneDigital\QueryFilterBundle\Service\QueryManager'
+        class: '%bd_query_filter.query_manager.class%'
     ### Filters
     bd_query_filter.filters.group:
         class: 'BrauneDigital\QueryFilterBundle\Query\Filter\GroupFilter'
