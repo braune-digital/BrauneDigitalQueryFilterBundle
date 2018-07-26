@@ -85,6 +85,10 @@ class QueryManager {
      * @param null $locale
      */
     public function filter(QueryBuilder $queryBuilder, $filterConfig = array(), $locale = null) {
+        
+        if ($filterConfig === false) {
+            return; // NOOP
+        }
 
         if (!is_array($filterConfig)) {
             throw new InvalidConfigException('The filter config must be an array.');
