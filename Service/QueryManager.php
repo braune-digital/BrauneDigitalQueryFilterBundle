@@ -68,10 +68,10 @@ class QueryManager {
         }
 
         $filterType = null;
-        if (array_key_exists('filter', $data)) {
-            $filterType = $data['filter'];
-        } else if (array_key_exists('type', $data)) {
+        if (array_key_exists('type', $data)) {
             $filterType = $data['type'];
+        } else if (array_key_exists('filter', $data)) {
+            $filterType = $data['filter'];
         } else {
             throw new \Exception('No filter specified in ' . $alias . '.' . $property);
         }
