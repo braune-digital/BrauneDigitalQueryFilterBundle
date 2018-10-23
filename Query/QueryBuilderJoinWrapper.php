@@ -12,13 +12,32 @@ class QueryBuilderJoinWrapper extends QueryBuilderParamWrapper implements QueryB
 
     protected $joinedProperties = array();
 
+    protected $joinAliasPrefix;
+
     /**
      * @param QueryBuilder $qb
      */
-    public function __construct(QueryBuilder $qb)
+    public function __construct(QueryBuilder $qb, $joinAliasPrefix = '')
     {
         parent::__construct($qb);
         $this->joinCounter = 0;
+        $this->joinAliasPrefix = $joinAliasPrefix;
+    }
+
+    /**
+     * @return string
+     */
+    public function getJoinAliasPrefix()
+    {
+        return $this->joinAliasPrefix;
+    }
+
+    /**
+     * @param string $joinAliasPrefix
+     */
+    public function setJoinAliasPrefix($joinAliasPrefix)
+    {
+        $this->joinAliasPrefix = $joinAliasPrefix;
     }
 
     /**
@@ -31,7 +50,7 @@ class QueryBuilderJoinWrapper extends QueryBuilderParamWrapper implements QueryB
         $aliasWithCount = null;
 
         do {
-            $aliasWithCount = "a" . $this->joinCounter;
+            $aliasWithCount = $this->getJoinAliasPrefix() . 'a' . $this->joinCounter;
             $this->joinCounter++;
         } while (in_array($aliasWithCount, $aliases));
 

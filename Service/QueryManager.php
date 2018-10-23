@@ -87,7 +87,11 @@ class QueryManager {
      * @param null $locale
      */
     public function filter(QueryBuilder $queryBuilder, $filterConfig = array(), $locale = null) {
-        
+        $qbWrapper = new QueryBuilderTranslationJoinWrapper($queryBuilder, $locale);
+        $this->filterWithWrapper($queryBuilder, $qbWrapper, $filterConfig);
+    }
+
+    public function filterWithWrapper(QueryBuilder $queryBuilder, QueryBuilderJoinWrapperInterface $qbWrapper, $filterConfig = array()) {
         if ($filterConfig === false) {
             return; // NOOP
         }
@@ -100,8 +104,6 @@ class QueryManager {
             //NOOP
             return;
         }
-
-        $qbWrapper = new QueryBuilderTranslationJoinWrapper($queryBuilder, $locale);
 
         if (array_keys($filterConfig) === range(0, count($filterConfig) - 1)) {
 
@@ -121,6 +123,8 @@ class QueryManager {
                 $queryBuilder->andWhere($expr);
             }
         }
+        
+
     }
 
     /**
@@ -129,12 +133,20 @@ class QueryManager {
      * @param null $locale
      */
     public function order(QueryBuilder $queryBuilder, $orderConfig = array(), $locale = null) {
+        $qbWrapper = new QueryBuilderTranslationJoinWrapper($queryBuilder, $locale);
+        $this->orderWithWrapper($queryBuilder, $qbWrapper, $orderConfig);
+    }
+
+    /**
+     * @param QueryBuilder $queryBuilder
+     * @param array $orderConfig
+     * @param null $locale
+     */
+    public function orderWithWrapper(QueryBuilder $queryBuilder, QueryBuilderJoinWrapperInterface $qbWrapper, $orderConfig = array()) {
 
         if (!is_array($orderConfig)) {
             throw new InvalidConfigException('The order config must be an array.');
         }
-
-        $qbWrapper = new QueryBuilderTranslationJoinWrapper($queryBuilder, $locale);
 
         foreach($orderConfig as $path => $order) {
 
@@ -162,6 +174,7 @@ class QueryManager {
 
     /**
      * @param $str
+     * TODO: This is not the best place here :D
      */
     public function toCamelCase($str) {
         $parts = explode('_', strtolower($str));
