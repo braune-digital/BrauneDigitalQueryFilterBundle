@@ -22,13 +22,16 @@ class QueryBuilderTranslationJoinWrapper extends QueryBuilderJoinWrapper
         $this->aliasClassMap = array_combine($this->getQueryBuilder()->getRootAliases(), $this->getQueryBuilder()->getRootEntities());
     }
 
+    public function getLocale() {
+        return $this->locale;
+    }
+
     /**
      * @param $alias
      * @return null
      */
     protected function getClass($alias)
     {
-
         if (isset($this->aliasClassMap[$alias])) {
             return $this->aliasClassMap[$alias];
         }
@@ -42,7 +45,6 @@ class QueryBuilderTranslationJoinWrapper extends QueryBuilderJoinWrapper
     protected function isTranslatable($alias)
     {
         $metaData = $this->getMetadata($alias);
-
         return $metaData->reflClass->implementsInterface(TranslatableInterface::class);
     }
 
@@ -171,12 +173,13 @@ class QueryBuilderTranslationJoinWrapper extends QueryBuilderJoinWrapper
         $rootAlias = $this->queryBuilder->getRootAlias();
 
         $joins = explode('.', $fullPath);
+
         $size = count($joins);
 
         for ($i = 0; $i < $size - 1; $i++) {
 
             $alias = $this->getRelationAlias($rootAlias, $joins[$i], $optional);
-
+            
             if ($alias == false) {
                 if ($this->locale && !$this->hasProperty($rootAlias, $joins[$i]) && $this->isTranslatable($rootAlias)) {
                     $alias = $this->getRelationAlias($rootAlias, 'translations', $optional);

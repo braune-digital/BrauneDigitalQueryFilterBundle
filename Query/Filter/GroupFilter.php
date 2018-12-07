@@ -37,12 +37,12 @@ class GroupFilter extends BaseFilter
         $or = null;
 
         if ($this->mode == 'and') {
-            $and =  array_key_exists('filters', $data) ? $this->getExpressions($qbWrapper, $manager, $alias, $property, $data['filters'], true) : null;
+            $and =  array_key_exists('filters', $data) ? $this->getExpressions($qbWrapper, $manager, $alias, $property, $data['filters'], false) : null;
         } else if ($this->mode == 'or') {
-            $or =  array_key_exists('filters', $data) ? $this->getExpressions($qbWrapper, $manager, $alias, $property, $data['filters'], false) : null;
+            $or =  array_key_exists('filters', $data) ? $this->getExpressions($qbWrapper, $manager, $alias, $property, $data['filters'], true) : null;
         } else {
-            $and =  array_key_exists('and', $data) ? $this->getExpressions($qbWrapper, $manager, $alias, $property, $data['and'], true) : null;
-            $or =  array_key_exists('or', $data) ? $this->getExpressions($qbWrapper, $manager, $alias, $property, $data['or'], false) : null;
+            $and =  array_key_exists('and', $data) ? $this->getExpressions($qbWrapper, $manager, $alias, $property, $data['and'], false) : null;
+            $or =  array_key_exists('or', $data) ? $this->getExpressions($qbWrapper, $manager, $alias, $property, $data['or'], true) : null;
         }
 
         if ($or) {
