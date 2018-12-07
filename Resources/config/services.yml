@@ -4,6 +4,7 @@ parameters:
 services:
     ### Query Manager
     bd_query_filter.query_manager:
+        public: true
         class: '%bd_query_filter.query_manager.class%'
     ### Filters
     bd_query_filter.filters.group:
