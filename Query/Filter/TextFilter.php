@@ -1,4 +1,5 @@
 <?php
+
 namespace BrauneDigital\QueryFilterBundle\Query\Filter;
 
 use Doctrine\ORM\Query\Expr\Comparison;
@@ -6,8 +7,12 @@ use BrauneDigital\QueryFilterBundle\Exception\InvalidConfigException;
 use BrauneDigital\QueryFilterBundle\Query\QueryBuilderJoinWrapperInterface;
 use BrauneDigital\QueryFilterBundle\Service\QueryManager;
 
-class TextFilter extends BaseFilter
-{
+class TextFilter extends BaseFilter{
+
+    const LIKE_ANY = 'any';
+    const LIKE_STARTS = 'starts';
+    const LIKE_ENDS = 'ends';
+
     /**
      * @param QueryBuilderJoinWrapperInterface $qbWrapper
      * @param QueryManager $manager
@@ -16,8 +21,7 @@ class TextFilter extends BaseFilter
      * @param $data
      * @return mixed
      */
-    public function getExpr(QueryBuilderJoinWrapperInterface $qbWrapper, QueryManager $manager, $alias, $property, $data, $optional = false)
-    {
+    public function getExpr(QueryBuilderJoinWrapperInterface $qbWrapper, QueryManager $manager, $alias, $property, $data, $optional = false) {
         $this->checkData($alias, $property, $data);
         $delimiter = array_key_exists('delimiter', $data) ? $data['delimiter'] : ' ';
 
@@ -30,6 +34,7 @@ class TextFilter extends BaseFilter
         $mode = array_key_exists('mode', $data) ? $data['mode'] : 'or';
         $func = $mode != 'and' ? 'orX' : 'andX';
 
+        $likeMode = array_key_exists('likeMode', $data) ? $data['likeMode'] : self::LIKE_ANY;
 
         $properties = array_key_exists('properties', $data) ? $data['properties'] : (array_key_exists('property', $data) ? array($data['property']) : null);
 
@@ -38,7 +43,7 @@ class TextFilter extends BaseFilter
             $paths[] = $alias . '.' . $property;
         } else {
             //convert paths
-            foreach($properties as $property) {
+            foreach ($properties as $property) {
                 list($alias, $property) = $manager->getAliasProperty($qbWrapper, $property, true);
                 $paths[] = $alias . '.' . $property;
             }
@@ -51,20 +56,35 @@ class TextFilter extends BaseFilter
         $expressions = array();
 
         //convert words into parameters
-	foreach ($words as $word) {
-            $wordLikeParam = $qbWrapper->newParam('%'.$word.'%');
+        foreach ($words as $word) {
+            switch ($likeMode) {
+                default:
+                case self::LIKE_ANY:
+                    $wordLikeParam = $qbWrapper->newParam('%' . $word . '%');
+                    break;
+                case self::LIKE_ENDS:
+                    $wordLikeParam = $qbWrapper->newParam('%' . $word);
+                    break;
+                case self::LIKE_STARTS:
+                    $wordLikeParam = $qbWrapper->newParam($word . '%');
+                    break;
+            }
+
             $wordEqParam = $qbWrapper->newParam($word);
             //each word has to appear in at least one field
             $comparisons = array();
-            foreach($paths as $path) {
-                $exp =  $qbWrapper->getQueryBuilder()->expr()->orX(new Comparison($path, 'LIKE', $wordLikeParam), new Comparison($path, '=', $wordEqParam));
+            foreach ($paths as $path) {
+                $exp = $qbWrapper->getQueryBuilder()->expr()->orX(new Comparison($path, 'LIKE', $wordLikeParam), new Comparison($path, '=', $wordEqParam));
                 if ($exp) {
                     $comparisons[] = $exp;
                 }
             }
 
             if (count($comparisons) > 0) {
-                $expressions[] = call_user_func_array(array($qbWrapper->getQueryBuilder()->expr(), $func), $comparisons);
+                $expressions[] = call_user_func_array(array(
+                    $qbWrapper->getQueryBuilder()->expr(),
+                    $func
+                ), $comparisons);
             }
         }
 
@@ -79,8 +99,7 @@ class TextFilter extends BaseFilter
      * @param $property
      * @param $data
      */
-    public function checkData($alias, $property, $data)
-    {
+    public function checkData($alias, $property, $data) {
         //we dont care for alias and property
         //parent::checkData($alias, $property, $data);
 
