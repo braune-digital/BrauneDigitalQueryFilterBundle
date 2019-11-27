@@ -130,7 +130,7 @@ class QueryBuilderTranslationJoinWrapper extends QueryBuilderJoinWrapper
                 $pos = strpos($joinPath, ".");
 
                 if ($pos === false) {
-                    throw new \Exception("Invalid Joins");
+                    continue;
                 }
 
                 if (strcmp(substr($joinPath, $pos + 1), $property) == 0) {

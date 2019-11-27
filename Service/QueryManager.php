@@ -85,12 +85,24 @@ class QueryManager {
      * @param QueryBuilder $queryBuilder
      * @param array $filterConfig
      * @param null $locale
+     * @deprecated
      */
     public function filter(QueryBuilder $queryBuilder, $filterConfig = array(), $locale = null) {
         $qbWrapper = new QueryBuilderTranslationJoinWrapper($queryBuilder, $locale);
-        $this->filterWithWrapper($queryBuilder, $qbWrapper, $filterConfig);
+        $this->filterWithWrapperOnly($qbWrapper, $filterConfig);
     }
 
+    public function filterWithWrapperOnly(QueryBuilderJoinWrapperInterface $qbWrapper, $filterConfig = array()) {
+        $this->filterWithWrapper($qbWrapper->getQueryBuilder(), $qbWrapper, $filterConfig);
+    }
+
+    /**
+     * @param QueryBuilder $queryBuilder
+     * @param QueryBuilderJoinWrapperInterface $qbWrapper
+     * @param array $filterConfig
+     * @throws InvalidConfigException
+     * @deprecated
+     */
     public function filterWithWrapper(QueryBuilder $queryBuilder, QueryBuilderJoinWrapperInterface $qbWrapper, $filterConfig = array()) {
         if ($filterConfig === false) {
             return; // NOOP
@@ -123,8 +135,6 @@ class QueryManager {
                 $queryBuilder->andWhere($expr);
             }
         }
-        
-
     }
 
     /**

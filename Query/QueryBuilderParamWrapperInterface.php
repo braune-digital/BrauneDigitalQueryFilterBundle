@@ -2,15 +2,8 @@
 
 namespace BrauneDigital\QueryFilterBundle\Query;
 
-use Doctrine\ORM\QueryBuilder;
-
 interface QueryBuilderParamWrapperInterface
 {
-    /**
-     * @param QueryBuilder $qb
-     */
-    function __construct(QueryBuilder $qb);
-
 
     /**
      * @return mixed
