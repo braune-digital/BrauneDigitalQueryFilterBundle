@@ -13,17 +13,17 @@ class QueryBuilderJoinInhibitorDecorator implements QueryBuilderJoinWrapperInter
     /**
      * @var InhibitorConfigInterface
      */
-    protected $inhibtorConfig;
+    protected $inhibitorConfig;
 
     /**
      * QueryBuilderJoinInhibitorDecorator constructor.
      * @param QueryBuilderJoinWrapperInterface $decorated
-     * @param InhibitorConfigInterface $inhibtorConfig
+     * @param InhibitorConfigInterface $inhibitorConfig
      */
-    public function __construct(QueryBuilderJoinWrapperInterface $decorated, InhibitorConfigInterface $inhibtorConfig)
+    public function __construct(QueryBuilderJoinWrapperInterface $decorated, InhibitorConfigInterface $inhibitorConfig)
     {
         $this->decorated = $decorated;
-        $this->inhibtorConfig = $inhibtorConfig;
+        $this->inhibitorConfig = $inhibitorConfig;
     }
 
     /**
@@ -39,7 +39,7 @@ class QueryBuilderJoinInhibitorDecorator implements QueryBuilderJoinWrapperInter
      */
     public function getInhibtorConfig(): InhibitorConfigInterface
     {
-        return $this->inhibtorConfig;
+        return $this->inhibitorConfig;
     }
 
 
@@ -61,7 +61,7 @@ class QueryBuilderJoinInhibitorDecorator implements QueryBuilderJoinWrapperInter
 
     public function getAlias($fullPath, $optional = false)
     {
-        if ($this->inhibtorConfig->isPathInhibited($fullPath)) {
+        if ($this->inhibitorConfig->isPathInhibited($fullPath)) {
             throw new PathInhibitedException($this, $fullPath);
         }
 
