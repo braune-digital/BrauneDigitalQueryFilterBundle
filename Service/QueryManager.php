@@ -2,6 +2,8 @@
 
 namespace BrauneDigital\QueryFilterBundle\Service;
 
+use BrauneDigital\QueryFilterBundle\Query\InhibitorConfig\InhibitorConfigInterface;
+use BrauneDigital\QueryFilterBundle\Query\QueryBuilderJoinInhibitorDecorator;
 use Doctrine\ORM\QueryBuilder;
 use BrauneDigital\QueryFilterBundle\Exception\InvalidConfigException;
 use BrauneDigital\QueryFilterBundle\Query\Filter\FilterInterface;
@@ -89,6 +91,17 @@ class QueryManager {
      */
     public function filter(QueryBuilder $queryBuilder, $filterConfig = array(), $locale = null) {
         $qbWrapper = new QueryBuilderTranslationJoinWrapper($queryBuilder, $locale);
+        $this->filterWithWrapperOnly($qbWrapper, $filterConfig);
+    }
+
+    /**
+     * @param QueryBuilder $queryBuilder
+     * @param array $filterConfig
+     * @param null $locale
+     * @deprecated
+     */
+    public function filterWithInhibitorConfig(QueryBuilder $queryBuilder, $filterConfig = array(), InhibitorConfigInterface $inhibitorConfig) {
+        $qbWrapper = new QueryBuilderJoinInhibitorDecorator($queryBuilder, $inhibitorConfig);
         $this->filterWithWrapperOnly($qbWrapper, $filterConfig);
     }
 
