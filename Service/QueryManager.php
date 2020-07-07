@@ -89,7 +89,7 @@ class QueryManager {
      * @param null $locale
      * @deprecated
      */
-    public function filter(QueryBuilder $queryBuilder, $filterConfig = array(), $locale = null) {
+    public function filter(QueryBuilder $queryBuilder, $filterConfig = array(), $locale = null): void {
         $qbWrapper = new QueryBuilderTranslationJoinWrapper($queryBuilder, $locale);
         $this->filterWithWrapperOnly($qbWrapper, $filterConfig);
     }
@@ -98,14 +98,16 @@ class QueryManager {
      * @param QueryBuilder $queryBuilder
      * @param array $filterConfig
      * @param InhibitorConfigInterface $inhibitorConfig
-     * @deprecated
+     * @throws InvalidConfigException
      */
-    public function filterWithInhibitorConfig(QueryBuilder $queryBuilder, $filterConfig = array(), InhibitorConfigInterface $inhibitorConfig) {
-        $qbWrapper = new QueryBuilderJoinInhibitorDecorator($queryBuilder, $inhibitorConfig);
-        $this->filterWithWrapperOnly($qbWrapper, $filterConfig);
+    public function filterWithInhibitorConfig(QueryBuilder $queryBuilder, $filterConfig = array(), InhibitorConfigInterface $inhibitorConfig): void {
+        $qbWrapper = new QueryBuilderTranslationJoinWrapper($queryBuilder);
+        $qbDecorator = new QueryBuilderJoinInhibitorDecorator($qbWrapper, $inhibitorConfig);
+        $this->filterWithWrapper($qbDecorator->getQueryBuilder(), $qbWrapper,  $filterConfig);
     }
 
-    public function filterWithWrapperOnly(QueryBuilderJoinWrapperInterface $qbWrapper, $filterConfig = array()) {
+
+    public function filterWithWrapperOnly(QueryBuilderJoinWrapperInterface $qbWrapper, $filterConfig = array()): void {
         $this->filterWithWrapper($qbWrapper->getQueryBuilder(), $qbWrapper, $filterConfig);
     }
 
@@ -116,7 +118,7 @@ class QueryManager {
      * @throws InvalidConfigException
      * @deprecated
      */
-    public function filterWithWrapper(QueryBuilder $queryBuilder, QueryBuilderJoinWrapperInterface $qbWrapper, $filterConfig = array()) {
+    public function filterWithWrapper(QueryBuilder $queryBuilder, QueryBuilderJoinWrapperInterface $qbWrapper, $filterConfig = array()): void {
         if ($filterConfig === false) {
             return; // NOOP
         }
@@ -155,7 +157,7 @@ class QueryManager {
      * @param array $orderConfig
      * @param null $locale
      */
-    public function order(QueryBuilder $queryBuilder, $orderConfig = array(), $locale = null) {
+    public function order(QueryBuilder $queryBuilder, $orderConfig = array(), $locale = null): void {
         $qbWrapper = new QueryBuilderTranslationJoinWrapper($queryBuilder, $locale);
         $this->orderWithWrapper($queryBuilder, $qbWrapper, $orderConfig);
     }
@@ -165,7 +167,7 @@ class QueryManager {
      * @param array $orderConfig
      * @param null $locale
      */
-    public function orderWithWrapper(QueryBuilder $queryBuilder, QueryBuilderJoinWrapperInterface $qbWrapper, $orderConfig = array()) {
+    public function orderWithWrapper(QueryBuilder $queryBuilder, QueryBuilderJoinWrapperInterface $qbWrapper, $orderConfig = array()): void {
 
         if (!is_array($orderConfig)) {
             throw new InvalidConfigException('The order config must be an array.');
