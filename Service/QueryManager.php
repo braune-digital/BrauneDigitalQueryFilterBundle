@@ -97,7 +97,7 @@ class QueryManager {
     /**
      * @param QueryBuilder $queryBuilder
      * @param array $filterConfig
-     * @param null $locale
+     * @param InhibitorConfigInterface $inhibitorConfig
      * @deprecated
      */
     public function filterWithInhibitorConfig(QueryBuilder $queryBuilder, $filterConfig = array(), InhibitorConfigInterface $inhibitorConfig) {
