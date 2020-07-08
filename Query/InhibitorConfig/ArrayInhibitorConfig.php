@@ -10,6 +10,9 @@ namespace BrauneDigital\QueryFilterBundle\Query\InhibitorConfig;
 
 class ArrayInhibitorConfig implements InhibitorConfigInterface
 {
+    /**
+     * @var array
+     */
     protected $allowedPaths = [];
 
     /**
@@ -24,7 +27,21 @@ class ArrayInhibitorConfig implements InhibitorConfigInterface
         );
     }
 
-    protected function flattenPaths($paths) {
+    /**
+     * @param array $allowedPaths
+     * @return static
+     */
+    public static function create(array $allowedPaths = []): self
+    {
+        return new self($allowedPaths);
+    }
+
+    /**
+     * @param $paths
+     * @return array
+     */
+    protected function flattenPaths($paths): array
+    {
         if (is_array($paths)) {
             $flattenedPaths = [];
             foreach ($paths as $prefix => $subPaths) {
@@ -43,12 +60,16 @@ class ArrayInhibitorConfig implements InhibitorConfigInterface
             }
 
             return array_unique($flattenedPaths);
-        } else {
-            return [(string) $paths];
         }
+
+        return [(string)$paths];
     }
 
-    public function isPathInhibited($path)
+    /**
+     * @param $path
+     * @return bool
+     */
+    public function isPathInhibited($path): bool
     {
         return !isset($this->allowedPaths[$path]);
     }
