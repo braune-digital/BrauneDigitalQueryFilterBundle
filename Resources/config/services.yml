@@ -2,10 +2,7 @@ parameters:
     bd_query_filter.query_manager.class: 'BrauneDigital\QueryFilterBundle\Service\QueryManager'
     
 services:
-    ### Query Manager
-    bd_query_filter.query_manager:
-        public: true
-        class: '%bd_query_filter.query_manager.class%'
+
     BrauneDigital\QueryFilterBundle\Service\QueryManager:
         public: true
     ### Filters

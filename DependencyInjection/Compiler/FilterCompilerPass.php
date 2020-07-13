@@ -13,12 +13,12 @@ class FilterCompilerPass implements CompilerPassInterface {
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->has('bd_query_filter.query_manager')) {
+        if (!$container->has('BrauneDigital\QueryFilterBundle\Service\QueryManager')) {
             return;
         }
 
         $definition = $container->findDefinition(
-            'bd_query_filter.query_manager'
+            'BrauneDigital\QueryFilterBundle\Service\QueryManager'
         );
 
         $taggedServices = $container->findTaggedServiceIds(
