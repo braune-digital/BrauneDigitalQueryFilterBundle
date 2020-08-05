@@ -76,17 +76,20 @@ class QueryBuilderTranslationJoinWrapper extends QueryBuilderJoinWrapper
     protected function join($rootAlias, $property, $optional = false)
     {
         $alias = $this->getFreeAlias();
-        if (isset($this->joinedProperties[$property])) {
-            return $this->joinedProperties[$property];
+
+        $propertyPath = $rootAlias . '.' . $property;
+
+        if (isset($this->joinedProperties[$propertyPath])) {
+            return $this->joinedProperties[$propertyPath];
         }
 
         if ($optional) {
-            $this->queryBuilder->leftJoin($rootAlias . '.' . $property, $alias);
+            $this->queryBuilder->leftJoin($propertyPath, $alias);
         } else {
-            $this->queryBuilder->join($rootAlias . '.' . $property, $alias);
+            $this->queryBuilder->join($propertyPath, $alias);
         }
 
-        $this->joinedProperties[$property] = $alias;
+        $this->joinedProperties[$propertyPath] = $alias;
 
         $metadata = $this->getMetadata($rootAlias);
         $this->aliasClassMap[$alias] = $metadata->associationMappings[$property]['targetEntity'];
@@ -179,7 +182,7 @@ class QueryBuilderTranslationJoinWrapper extends QueryBuilderJoinWrapper
         for ($i = 0; $i < $size - 1; $i++) {
 
             $alias = $this->getRelationAlias($rootAlias, $joins[$i], $optional);
-            
+
             if ($alias == false) {
                 if ($this->locale && !$this->hasProperty($rootAlias, $joins[$i]) && $this->isTranslatable($rootAlias)) {
                     $alias = $this->getRelationAlias($rootAlias, 'translations', $optional);
